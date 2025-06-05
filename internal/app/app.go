@@ -5,6 +5,7 @@ import (
 
 	"github.com/Y2ktorrez/go-flutter-parcial2_api/config"
 	v1 "github.com/Y2ktorrez/go-flutter-parcial2_api/internal/controller/http/v1"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/controller/socket"
 	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/entity"
 	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/usecase/repositories"
 	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/usecase/services"
@@ -64,4 +65,19 @@ func (a *App) setupRoutes() {
 
 	// Setup routes
 	v1.SetupRoutes(a.router, userService, projectService)
+
+	a.router.Use(func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
+		c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-User-ID")
+		
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+		
+		c.Next()
+	})
+	
+	socket.SetupRoutes(a.router)
 }
