@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"gin-clean/config"
-	"gin-clean/internal/app"
 	"log"
+
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/config"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/app"
 )
 
 func main() {

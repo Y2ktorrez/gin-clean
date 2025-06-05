@@ -7,15 +7,15 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/gin-clean ./cmd/app
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/go-flutter-parcial2_api ./cmd/app
 
 FROM alpine:3.19
 
 WORKDIR /app
 
-COPY --from=builder /app/gin-clean .
+COPY --from=builder /app/go-flutter-parcial2_api .
 COPY .env .
 
 EXPOSE 8080
 
-CMD ["./gin-clean"]
+CMD ["./go-flutter-parcial2_api"]

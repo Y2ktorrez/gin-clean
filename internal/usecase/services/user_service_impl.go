@@ -1,8 +1,8 @@
 package services
 
 import (
-	"gin-clean/internal/entity"
-	"gin-clean/internal/usecase/repositories"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/entity"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/usecase/repositories"
 )
 
 type UserServiceImpl struct {
@@ -17,7 +17,7 @@ func (s *UserServiceImpl) CreateUser(user *entity.User) error {
 	return s.repo.Create(user)
 }
 
-func (s *UserServiceImpl) GetUserByID(id uint) (*entity.User, error) {
+func (s *UserServiceImpl) GetUserByID(id string) (*entity.User, error) {
 	return s.repo.FindByID(id)
 }
 
@@ -29,6 +29,6 @@ func (s *UserServiceImpl) UpdateUser(user *entity.User) error {
 	return s.repo.Update(user)
 }
 
-func (s *UserServiceImpl) DeleteUser(id uint) error {
+func (s *UserServiceImpl) DeleteUser(id string) error {
 	return s.repo.Delete(id)
 }

@@ -1,12 +1,12 @@
 package v1
 
 import (
-	"gin-clean/internal/usecase/services"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/usecase/services"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(router *gin.Engine, userService services.UserService) {
+func SetupRoutes(router *gin.Engine, userService services.UserService, projectService services.ProjectService) {
 	v1 := router.Group("/api/v1")
 	{
 		userHandler := NewUserHandler(userService)
@@ -17,6 +17,16 @@ func SetupRoutes(router *gin.Engine, userService services.UserService) {
 			users.GET("/", userHandler.GetAll)
 			users.PUT("/:id", userHandler.Update)
 			users.DELETE("/:id", userHandler.Delete)
+		}
+
+		projectHandler := NewProjectHandler(projectService)
+		projects := v1.Group("/projects")
+		{
+			projects.POST("/", projectHandler.Create)
+			projects.GET("/:id", projectHandler.GetByID)
+			projects.GET("/", projectHandler.GetAll)
+			projects.PUT("/:id", projectHandler.Update)
+			projects.DELETE("/:id", projectHandler.Delete)
 		}
 	}
 }

@@ -54,8 +54,8 @@ To build and run the application using Docker:
 
 ```bash
 # Build the image
-docker build -t gin-clean .
+docker build -t github.com/Y2ktorrez/go-flutter-parcial2_api .
 
 # Run the container
-docker run -p 8080:8080 --env-file .env gin-clean
+docker run -p 8080:8080 --env-file .env github.com/Y2ktorrez/go-flutter-parcial2_api
 ```

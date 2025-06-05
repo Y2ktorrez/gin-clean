@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"gin-clean/internal/entity"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/entity"
 
 	"gorm.io/gorm"
 )
@@ -18,7 +18,7 @@ func (r *UserRepositoryImpl) Create(user *entity.User) error {
 	return r.db.Create(user).Error
 }
 
-func (r *UserRepositoryImpl) FindByID(id uint) (*entity.User, error) {
+func (r *UserRepositoryImpl) FindByID(id string) (*entity.User, error) {
 	var user entity.User
 	err := r.db.First(&user, id).Error
 	if err != nil {
@@ -37,6 +37,6 @@ func (r *UserRepositoryImpl) Update(user *entity.User) error {
 	return r.db.Save(user).Error
 }
 
-func (r *UserRepositoryImpl) Delete(id uint) error {
+func (r *UserRepositoryImpl) Delete(id string) error {
 	return r.db.Delete(&entity.User{}, id).Error
 }

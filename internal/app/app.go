@@ -2,11 +2,13 @@ package app
 
 import (
 	"fmt"
-	"gin-clean/config"
-	v1 "gin-clean/internal/controller/http/v1"
-	"gin-clean/internal/entity"
-	"gin-clean/internal/usecase/repositories"
-	"gin-clean/internal/usecase/services"
+
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/config"
+	v1 "github.com/Y2ktorrez/go-flutter-parcial2_api/internal/controller/http/v1"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/entity"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/usecase/repositories"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/usecase/services"
+	impl "github.com/Y2ktorrez/go-flutter-parcial2_api/internal/usecase/services/Impl"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
@@ -44,7 +46,7 @@ func setupDatabase(config *config.Config) (*gorm.DB, error) {
 	}
 
 	// Auto-migrate the database
-	if err := db.AutoMigrate(&entity.User{}); err != nil {
+	if err := db.AutoMigrate(&entity.User{}, &entity.Project{}); err != nil {
 		return nil, err
 	}
 
@@ -54,10 +56,12 @@ func setupDatabase(config *config.Config) (*gorm.DB, error) {
 func (a *App) setupRoutes() {
 	// Initialize repositories
 	userRepo := repositories.NewUserRepository(a.db)
+	projectRepo := repositories.NewProjectRepository(a.db)
 
 	// Initialize services
 	userService := services.NewUserService(userRepo)
+	projectService := impl.NewProjectService(projectRepo)
 
 	// Setup routes
-	v1.SetupRoutes(a.router, userService)
+	v1.SetupRoutes(a.router, userService, projectService)
 }

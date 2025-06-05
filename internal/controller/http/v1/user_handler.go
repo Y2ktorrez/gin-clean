@@ -1,10 +1,11 @@
 package v1
 
 import (
-	"gin-clean/internal/entity"
-	"gin-clean/internal/usecase/services"
 	"net/http"
-	"strconv"
+
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/entity"
+	"github.com/Y2ktorrez/go-flutter-parcial2_api/internal/usecase/services"
+	"github.com/google/uuid"
 
 	"github.com/gin-gonic/gin"
 )
@@ -35,13 +36,13 @@ func (h *UserHandler) Create(c *gin.Context) {
 }
 
 func (h *UserHandler) GetByID(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
-	if err != nil {
+	id := c.Param("id")
+	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
 		return
 	}
 
-	user, err := h.userService.GetUserByID(uint(id))
+	user, err := h.userService.GetUserByID(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
 		return
@@ -61,9 +62,15 @@ func (h *UserHandler) GetAll(c *gin.Context) {
 }
 
 func (h *UserHandler) Update(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
-	if err != nil {
+	id := c.Param("id")
+	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		return
+	}
+
+	userID, err := uuid.Parse(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid UUID format"})
 		return
 	}
 
@@ -73,7 +80,7 @@ func (h *UserHandler) Update(c *gin.Context) {
 		return
 	}
 
-	user.ID = uint(id)
+	user.ID = userID
 	if err := h.userService.UpdateUser(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -83,13 +90,13 @@ func (h *UserHandler) Update(c *gin.Context) {
 }
 
 func (h *UserHandler) Delete(c *gin.Context) {
-	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
-	if err != nil {
+	id := c.Param("id")
+	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
 		return
 	}
 
-	if err := h.userService.DeleteUser(uint(id)); err != nil {
+	if err := h.userService.DeleteUser(id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
